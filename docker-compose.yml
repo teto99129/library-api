@@ -13,4 +13,19 @@ services:
       - .:/app
       - ~/.gemini:/home/ubuntu/.gemini:ro
       - ~/.local/bin:/home/ubuntu/.local/bin
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydb
+    depends_on:
+      - db
+
+  db:
+    image: postgres:alpine3.23
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: postgres
+
 

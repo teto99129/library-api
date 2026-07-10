@@ -2,7 +2,9 @@ spring:
   application:
     name: library
   datasource:
-    url: jdbc:postgresql://localhost:5432/mydb
+    url: jdbc:postgresql://host.docker.internal:5432/mydb
     username: user
     password: postgres
     driver-class-name: org.postgresql.Driver
+  flyway:
+    baseline-on-migrate: true
