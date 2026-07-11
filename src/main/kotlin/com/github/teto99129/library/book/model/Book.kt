@@ -1,16 +1,13 @@
 package com.github.teto99129.library.book.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.github.teto99129.library.author.model.Author
 import java.time.OffsetDateTime
 
-data class PostBookResponse(
+data class Book(
 	val bookID: Int,
 	val title: String,
 	val value: Int,
-	@JsonProperty("publication_status")
 	val publicationStatus: Short,
-	@JsonProperty("created_at")
 	val createdAt: OffsetDateTime,
-	val authors: List<Author>
+	val authors: List<Author> = emptyList(),
 )

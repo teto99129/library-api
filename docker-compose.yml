@@ -11,7 +11,6 @@ services:
       - ~/.local/share:/home/ubuntu/.local/share
       - ~/.cache/nvim:/home/ubuntu/.cache/nvim
       - .:/app
-      - ~/.gemini:/home/ubuntu/.gemini:ro
       - ~/.local/bin:/home/ubuntu/.local/bin
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydb

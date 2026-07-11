@@ -14,4 +14,8 @@ RUN wget "https://download-cdn.jetbrains.com/language-server/kotlin-server/${KOT
     sha256sum -c kotlin-server-${KOTLIN_LSP_VERSION}.tar.gz.sha256 && \
     tar -xzvf kotlin-server-${KOTLIN_LSP_VERSION}.tar.gz && \
     rm kotlin-server-${KOTLIN_LSP_VERSION}.tar.gz
-ENV PATH=$PATH:/home/ubuntu/kotlin-server-${KOTLIN_LSP_VERSION}/bin:/home/ubuntu/.local/bin
+
+RUN wget https://github.com/fwcd/kotlin-debug-adapter/releases/download/0.4.4/adapter.zip && \
+    unzip adapter.zip
+ENV PATH=$PATH:/home/ubuntu/kotlin-server-${KOTLIN_LSP_VERSION}/bin:/home/ubuntu/.local/bin:/home/ubuntu/adapter/bin
+
