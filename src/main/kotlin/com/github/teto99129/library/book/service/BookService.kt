@@ -54,4 +54,11 @@ class BookService(
 		)
 	}
 
+	fun getBook(authId: Int?, authName: String?): List<Book> {
+		return this.repository.getBook(
+			authId = authId,
+			authName = authName,
+		)
+	}
+
 }

@@ -8,4 +8,5 @@ interface BookRepository {
 	fun insertBookAuthors(bookId: Int, authors: List<Int>): BookAuthors
 	fun updateBook(bookId: Int, title: String?, value: Int?, publicationStatus: Short?): Book
 	fun deleteBookAuthors(bookId: Int)
+	fun getBook(authId: Int?, authName: String?): List<Book>
 }
