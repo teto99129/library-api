@@ -8,5 +8,5 @@ data class PostBookRequest(
 	val value: Int,
 	@JsonProperty("publication_status")
 	val publicationStatus: Short,
-        val authors: List<Int>
+	val authors: List<Int>
 )

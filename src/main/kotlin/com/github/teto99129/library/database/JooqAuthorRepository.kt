@@ -56,7 +56,7 @@ class JooqAuthorRepository(private val dsl: DSLContext): AuthorRepository {
 			}
 	}
 
-        override fun updateAuthor(authorId: Int, name: String?, birthday: LocalDate?): Author {
+	override fun updateAuthor(authorId: Int, name: String?, birthday: LocalDate?): Author {
 		val updateValues = mutableMapOf<Field<*>, Any?>()
 		if (name != null) updateValues[AUTHORS.NAME] = name
 		if (birthday != null) updateValues[AUTHORS.BIRTHDAY] = birthday
@@ -77,6 +77,5 @@ class JooqAuthorRepository(private val dsl: DSLContext): AuthorRepository {
 			name = record.name!!,
 			birthday = record.birthday!!,
 		)
-	
-        }
+	}
 }

@@ -7,12 +7,12 @@ import java.time.LocalDate
 
 @Service
 class AuthorService(private val _repository: AuthorRepository) {
-        fun registerAuthor(name: String, birthday: LocalDate): Author {
+	fun registerAuthor(name: String, birthday: LocalDate): Author {
 		return this._repository.insertAuthor(
 			name = name,
 			birthday = birthday
 		)
-        }
+	}
 
 	fun updateAuthor(authorId: Int, name: String?, birthday: LocalDate?): Author {
 		return this._repository.updateAuthor(
