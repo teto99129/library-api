@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class AuthorController(
-	private val _service: AuthorService,
+	private val service: AuthorService,
 ) {
 	@PostMapping("/author")
 	fun registerAuthor(
 		@RequestBody body: PostAuthorRequest,
 	): AuthorResponse {
-		val author = this._service.registerAuthor(body.name, body.birthday)
+		val author = this.service.registerAuthor(body.name, body.birthday)
 		return AuthorResponse(
 			authorId = author.authorId,
 			name = author.name,
@@ -31,7 +31,7 @@ class AuthorController(
 		@PathVariable authorId: Int,
 		@RequestBody body: PatchAuthorRequest,
 	): AuthorResponse {
-		val author = this._service.updateAuthor(authorId, body.name, body.birthday)
+		val author = this.service.updateAuthor(authorId, body.name, body.birthday)
 		return AuthorResponse(
 			authorId = author.authorId,
 			name = author.name,

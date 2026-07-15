@@ -17,13 +17,13 @@ import org.springframework.web.server.ResponseStatusException
 
 @RestController
 class BookController(
-	private val _service: BookService,
+	private val service: BookService,
 ) {
 	@PostMapping("/book")
 	fun registerBook(
 		@RequestBody @Valid body: PostBookRequest,
 	): BookResponse {
-		val book = this._service.registerBook(body.title, body.value, body.authors, body.publicationStatus)
+		val book = this.service.registerBook(body.title, body.value, body.authors, body.publicationStatus)
 		return BookResponse.from(book)
 	}
 
@@ -35,7 +35,7 @@ class BookController(
 		if (!body.hasAnyUpdate()) {
 			throw ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one field must be provided for update")
 		}
-		val book = this._service.updateBook(bookId, body)
+		val book = this.service.updateBook(bookId, body)
 		return BookResponse.from(book)
 	}
 
@@ -44,7 +44,7 @@ class BookController(
 		@RequestParam("auth_id") authId: Int?,
 		@RequestParam("auth_name") authName: String?,
 	): List<BookResponse> =
-		this._service.getBook(authId, authName).map { book ->
+		this.service.getBook(authId, authName).map { book ->
 			BookResponse.from(book)
 		}
 }

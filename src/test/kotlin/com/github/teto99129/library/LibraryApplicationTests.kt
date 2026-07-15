@@ -7,5 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest
 class LibraryApplicationTests {
 	@Test
 	fun contextLoads() {
+		// This test method checks that the Spring application context loads successfully.
 	}
 }

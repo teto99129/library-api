@@ -33,12 +33,12 @@ class JooqBookRepository(
 				.columns(BOOKS.TITLE, BOOKS.VALUE, BOOKS.PUBLICATION_STATUS, BOOKS.CREATED_AT)
 				.values(title, value, publicationStatus.code, OffsetDateTime.now())
 				.returning()
-				.fetchOne() ?: throw IllegalStateException("Failed to insert book")
+				.fetchOne() ?: error("Failed to insert book")
 
 		val bookId = record.bookId!!
 		insertBookAuthors(bookId, authors)
 
-		return getBookById(bookId) ?: throw IllegalStateException("Failed to fetch inserted book with ID: $bookId")
+		return getBookById(bookId) ?: error("Failed to fetch inserted book with ID: $bookId")
 	}
 
 	override fun insertBookAuthors(
@@ -86,7 +86,7 @@ class JooqBookRepository(
 			insertBookAuthors(bookId, authors)
 		}
 
-		return getBookById(bookId) ?: throw IllegalStateException("Failed to fetch updated book with ID: $bookId")
+		return getBookById(bookId) ?: error("Failed to fetch updated book with ID: $bookId")
 	}
 
 	override fun deleteBookAuthors(bookId: Int) {

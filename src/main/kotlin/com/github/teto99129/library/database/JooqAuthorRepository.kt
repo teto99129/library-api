@@ -24,7 +24,7 @@ class JooqAuthorRepository(
 				.columns(AUTHORS.NAME, AUTHORS.BIRTHDAY)
 				.values(name, birthday)
 				.returning()
-				.fetchOne() ?: throw IllegalStateException("Failed to insert author")
+				.fetchOne() ?: error("Failed to insert author")
 
 		return Author(
 			authorId = record.authorId!!,
@@ -51,7 +51,7 @@ class JooqAuthorRepository(
 
 	override fun findAuthorsByBookId(bookId: Int): List<Author> =
 		dsl
-			.select(*AUTHORS.fields())
+			.select(AUTHORS.fields().toList())
 			.from(AUTHORS)
 			.join(BOOK_AUTHORS)
 			.on(AUTHORS.AUTHOR_ID.eq(BOOK_AUTHORS.AUTHOR_ID))
@@ -81,12 +81,12 @@ class JooqAuthorRepository(
 					.set(updateValues)
 					.where(AUTHORS.AUTHOR_ID.eq(authorId))
 					.returning()
-					.fetchOne() ?: throw IllegalStateException("Failed to update author with ID: $authorId")
+					.fetchOne() ?: error("Failed to update author with ID: $authorId")
 			} else {
 				dsl
 					.selectFrom(AUTHORS)
 					.where(AUTHORS.AUTHOR_ID.eq(authorId))
-					.fetchOne() ?: throw IllegalStateException("Author not found with ID: $authorId")
+					.fetchOne() ?: error("Author not found with ID: $authorId")
 			}
 		return Author(
 			authorId = record.authorId!!,
