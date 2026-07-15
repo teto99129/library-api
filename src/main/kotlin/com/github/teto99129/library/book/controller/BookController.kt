@@ -5,7 +5,6 @@ import com.github.teto99129.library.book.model.PatchBookRequest
 import com.github.teto99129.library.book.model.PostBookRequest
 import com.github.teto99129.library.book.service.BookService
 import jakarta.validation.Valid
-import jakarta.websocket.server.PathParam
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -17,10 +16,13 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 
 @RestController
-class BookController(private val _service: BookService) {
-
+class BookController(
+	private val _service: BookService,
+) {
 	@PostMapping("/book")
-	fun registerBook(@RequestBody @Valid body: PostBookRequest): BookResponse {
+	fun registerBook(
+		@RequestBody @Valid body: PostBookRequest,
+	): BookResponse {
 		val book = this._service.registerBook(body.title, body.value, body.authors, body.publicationStatus)
 		return BookResponse.from(book)
 	}
@@ -28,7 +30,7 @@ class BookController(private val _service: BookService) {
 	@PatchMapping("/book/{bookId}")
 	fun updateBook(
 		@PathVariable bookId: Int,
-		@RequestBody @Valid body: PatchBookRequest
+		@RequestBody @Valid body: PatchBookRequest,
 	): BookResponse {
 		if (!body.hasAnyUpdate()) {
 			throw ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one field must be provided for update")
@@ -40,12 +42,9 @@ class BookController(private val _service: BookService) {
 	@GetMapping("/book")
 	fun getBook(
 		@RequestParam("auth_id") authId: Int?,
-		@RequestParam("auth_name") authName: String?
-	): List<BookResponse> {
-		return this._service.getBook(authId, authName).map { book -> 
+		@RequestParam("auth_name") authName: String?,
+	): List<BookResponse> =
+		this._service.getBook(authId, authName).map { book ->
 			BookResponse.from(book)
 		}
-	}
-
-
 }

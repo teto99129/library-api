@@ -5,5 +5,5 @@ import java.time.LocalDate
 data class Author(
 	val authorId: Int,
 	val name: String,
-	val birthday: LocalDate
+	val birthday: LocalDate,
 )

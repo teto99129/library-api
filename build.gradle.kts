@@ -15,7 +15,9 @@ plugins {
 	id("org.springframework.boot") version "4.1.0"
 	id("io.spring.dependency-management") version "1.1.7"
 	id("org.flywaydb.flyway") version "11.19.1"
-        id("org.jooq.jooq-codegen-gradle") version "3.21.6"
+	id("org.jooq.jooq-codegen-gradle") version "3.21.6"
+	id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
+	id("io.gitlab.arturbosch.detekt") version "1.23.8"
 }
 
 group = "com.github.teto99129"
@@ -37,7 +39,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-jooq")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.flywaydb:flyway-core")
-        implementation("tools.jackson.module:jackson-module-kotlin:3.2.0")
+	implementation("tools.jackson.module:jackson-module-kotlin:3.2.0")
 	runtimeOnly("org.postgresql:postgresql")
 	runtimeOnly("org.flywaydb:flyway-database-postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-jooq-test")
@@ -97,4 +99,16 @@ jooq {
 			}
 		}
 	}
+}
+
+ktlint {
+	filter {
+		exclude { it.file.path.contains("build/generated-sources") }
+	}
+}
+
+detekt {
+	toolVersion = "1.23.8"
+	buildUponDefaultConfig = true
+	source.setFrom(files("src/main/kotlin", "src/test/kotlin"))
 }

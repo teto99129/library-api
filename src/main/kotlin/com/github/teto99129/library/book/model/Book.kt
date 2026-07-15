@@ -1,8 +1,8 @@
 package com.github.teto99129.library.book.model
 
 import com.github.teto99129.library.author.model.Author
-import java.time.OffsetDateTime
 import jakarta.validation.constraints.Min
+import java.time.OffsetDateTime
 
 data class Book(
 	val bookID: Int,

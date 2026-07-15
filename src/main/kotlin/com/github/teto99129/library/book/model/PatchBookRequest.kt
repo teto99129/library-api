@@ -11,9 +11,7 @@ data class PatchBookRequest(
 	@JsonProperty("publication_status")
 	val publicationStatus: PublicationStatus?,
 	@field:Size(min = 1)
-	val authors: List<Int>?
+	val authors: List<Int>?,
 ) {
-	fun hasAnyUpdate(): Boolean {
-		return title != null || value != null || publicationStatus != null || authors != null
-	}
+	fun hasAnyUpdate(): Boolean = title != null || value != null || publicationStatus != null || authors != null
 }

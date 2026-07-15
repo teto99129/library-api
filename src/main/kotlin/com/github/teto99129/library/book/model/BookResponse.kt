@@ -14,19 +14,18 @@ data class BookResponse(
 	val publicationStatusLabel: String,
 	@JsonProperty("created_at")
 	val createdAt: OffsetDateTime,
-	val authors: List<Author>
+	val authors: List<Author>,
 ) {
 	companion object {
-		fun from(book: Book): BookResponse {
-			return BookResponse(
+		fun from(book: Book): BookResponse =
+			BookResponse(
 				bookID = book.bookID,
 				title = book.title,
 				value = book.value,
 				publicationStatus = book.publicationStatus.code,
 				publicationStatusLabel = book.publicationStatus.label,
 				createdAt = book.createdAt,
-				authors = book.authors
+				authors = book.authors,
 			)
-		}
 	}
 }

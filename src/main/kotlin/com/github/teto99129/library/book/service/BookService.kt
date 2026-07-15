@@ -12,23 +12,30 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 class BookService(
-	private val repository: BookRepository
+	private val repository: BookRepository,
 ) {
-
 	@Transactional
-	fun registerBook(title: String, value: Int, authors: List<Int>, publicationStatus: PublicationStatus): Book {
-		return this.repository.insertBook(
+	fun registerBook(
+		title: String,
+		value: Int,
+		authors: List<Int>,
+		publicationStatus: PublicationStatus,
+	): Book =
+		this.repository.insertBook(
 			title = title,
 			value = value,
 			publicationStatus = publicationStatus,
-			authors = authors
+			authors = authors,
 		)
-	}
 
 	@Transactional
-	fun updateBook(bookId: Int, request: PatchBookRequest): Book {
-		val currentBook = this.repository.getBookById(bookId)
-			?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found")
+	fun updateBook(
+		bookId: Int,
+		request: PatchBookRequest,
+	): Book {
+		val currentBook =
+			this.repository.getBookById(bookId)
+				?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found")
 
 		if (request.publicationStatus != null) {
 			if (currentBook.publicationStatus == PublicationStatus.PUBLISHED &&
@@ -43,22 +50,25 @@ class BookService(
 			title = request.title,
 			value = request.value,
 			publicationStatus = request.publicationStatus,
-			authors = request.authors
+			authors = request.authors,
 		)
 	}
 
-	fun registerBookAuthors(bookId: Int, authors: List<Int>): BookAuthors {
-		return this.repository.insertBookAuthors(
+	fun registerBookAuthors(
+		bookId: Int,
+		authors: List<Int>,
+	): BookAuthors =
+		this.repository.insertBookAuthors(
 			bookId = bookId,
-			authors = authors
+			authors = authors,
 		)
-	}
 
-	fun getBook(authId: Int?, authName: String?): List<Book> {
-		return this.repository.getBook(
+	fun getBook(
+		authId: Int?,
+		authName: String?,
+	): List<Book> =
+		this.repository.getBook(
 			authId = authId,
 			authName = authName,
 		)
-	}
-
 }

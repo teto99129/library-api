@@ -4,5 +4,5 @@ import java.time.LocalDate
 
 data class PostAuthorRequest(
 	val name: String,
-	val birthday: LocalDate
+	val birthday: LocalDate,
 )
