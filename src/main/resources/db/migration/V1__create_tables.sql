@@ -6,13 +6,6 @@ CREATE TABLE books (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-CREATE TABLE publication_status_mst (
-    publication_status SMALLINT,
-    publication_label VARCHAR(255)
-);
-INSERT INTO publication_status_mst (publication_status, publication_label) values (0, '未出版');
-INSERT INTO publication_status_mst (publication_status, publication_label) values (1, '出版済み');
-
 CREATE TABLE authors (
     author_id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,

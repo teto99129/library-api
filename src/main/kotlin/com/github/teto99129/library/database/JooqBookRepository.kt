@@ -3,6 +3,7 @@ package com.github.teto99129.library.database
 import com.github.teto99129.library.author.model.Author
 import com.github.teto99129.library.book.model.Book
 import com.github.teto99129.library.book.model.BookAuthors
+import com.github.teto99129.library.book.model.PublicationStatus
 import com.github.teto99129.library.book.repository.BookRepository
 import com.github.teto99129.library.jooq.tables.records.BooksRecord
 import com.github.teto99129.library.jooq.tables.references.AUTHORS
@@ -18,10 +19,10 @@ import java.time.OffsetDateTime
 
 @Repository
 class JooqBookRepository(private val dsl: DSLContext): BookRepository {
-	override fun insertBook(title: String, value: Int, publicationStatus: Short, authors: List<Int>): Book {
+	override fun insertBook(title: String, value: Int, publicationStatus: PublicationStatus, authors: List<Int>): Book {
 		val record: BooksRecord =  dsl.insertInto(BOOKS)
 			.columns(BOOKS.TITLE, BOOKS.VALUE, BOOKS.PUBLICATION_STATUS, BOOKS.CREATED_AT)
-			.values(title, value, publicationStatus, OffsetDateTime.now())
+			.values(title, value, publicationStatus.code, OffsetDateTime.now())
 			.returning()
 			.fetchOne() ?: throw IllegalStateException("Failed to insert book")
 
@@ -46,11 +47,11 @@ class JooqBookRepository(private val dsl: DSLContext): BookRepository {
 		return BookAuthors(bookId, authors)
 	}
 
-	override fun updateBook(bookId: Int, title: String?, value: Int?, publicationStatus: Short?, authors: List<Int>?): Book {
+	override fun updateBook(bookId: Int, title: String?, value: Int?, publicationStatus: PublicationStatus?, authors: List<Int>?): Book {
 		val updateValues = mutableMapOf<Field<*>, Any?>()
 		if (title != null) updateValues[BOOKS.TITLE] = title
 		if (value != null) updateValues[BOOKS.VALUE] = value
-		if (publicationStatus != null) updateValues[BOOKS.PUBLICATION_STATUS] = publicationStatus
+		if (publicationStatus != null) updateValues[BOOKS.PUBLICATION_STATUS] = publicationStatus.code
 
 		if (updateValues.isNotEmpty()) {
 			dsl.update(BOOKS)
@@ -117,14 +118,14 @@ class JooqBookRepository(private val dsl: DSLContext): BookRepository {
 				bookID = record.get(BOOKS.BOOK_ID)!!,
 				title = record.get(BOOKS.TITLE)!!,
 				value = record.get(BOOKS.VALUE)!!,
-				publicationStatus = record.get(BOOKS.PUBLICATION_STATUS)!!,
+				publicationStatus = PublicationStatus.fromCode(record.get(BOOKS.PUBLICATION_STATUS)!!),
 				createdAt = record.get(BOOKS.CREATED_AT)!!,
 				authors = record.get(authorsField) ?: emptyList()
 			)
 		}
 	}
 
-	private fun getBookById(bookId: Int): Book? {
+	override fun getBookById(bookId: Int): Book? {
 		val authorsField = multiset(
 			select(AUTHORS.AUTHOR_ID, AUTHORS.NAME, AUTHORS.BIRTHDAY)
 				.from(AUTHORS)
@@ -155,7 +156,7 @@ class JooqBookRepository(private val dsl: DSLContext): BookRepository {
 				bookID = record.get(BOOKS.BOOK_ID)!!,
 				title = record.get(BOOKS.TITLE)!!,
 				value = record.get(BOOKS.VALUE)!!,
-				publicationStatus = record.get(BOOKS.PUBLICATION_STATUS)!!,
+				publicationStatus = PublicationStatus.fromCode(record.get(BOOKS.PUBLICATION_STATUS)!!),
 				createdAt = record.get(BOOKS.CREATED_AT)!!,
 				authors = record.get(authorsField) ?: emptyList()
 			)

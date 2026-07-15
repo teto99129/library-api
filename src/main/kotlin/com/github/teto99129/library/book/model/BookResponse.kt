@@ -10,6 +10,8 @@ data class BookResponse(
 	val value: Int,
 	@JsonProperty("publication_status")
 	val publicationStatus: Short,
+	@JsonProperty("publication_status_label")
+	val publicationStatusLabel: String,
 	@JsonProperty("created_at")
 	val createdAt: OffsetDateTime,
 	val authors: List<Author>
@@ -20,7 +22,8 @@ data class BookResponse(
 				bookID = book.bookID,
 				title = book.title,
 				value = book.value,
-				publicationStatus = book.publicationStatus,
+				publicationStatus = book.publicationStatus.code,
+				publicationStatusLabel = book.publicationStatus.label,
 				createdAt = book.createdAt,
 				authors = book.authors
 			)
