@@ -1,5 +1,6 @@
 package com.github.teto99129.library.database
 
+import com.github.teto99129.library.common.exception.ResourceNotFoundException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
@@ -97,7 +98,7 @@ class JooqAuthorRepositoryTest(
 			it("異常 - 存在しないIDを指定した場合は例外が発生すること") {
 				val nonExistentId = -9999
 
-				shouldThrow<IllegalStateException> {
+				shouldThrow<ResourceNotFoundException> {
 					repository.updateAuthor(nonExistentId, "幽霊 著者", LocalDate.now())
 				}
 			}

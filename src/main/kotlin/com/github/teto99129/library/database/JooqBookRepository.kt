@@ -5,6 +5,7 @@ import com.github.teto99129.library.book.model.Book
 import com.github.teto99129.library.book.model.BookAuthors
 import com.github.teto99129.library.book.model.PublicationStatus
 import com.github.teto99129.library.book.repository.BookRepository
+import com.github.teto99129.library.common.exception.ResourceNotFoundException
 import com.github.teto99129.library.jooq.tables.records.BooksRecord
 import com.github.teto99129.library.jooq.tables.references.AUTHORS
 import com.github.teto99129.library.jooq.tables.references.BOOKS
@@ -86,7 +87,7 @@ class JooqBookRepository(
 			insertBookAuthors(bookId, authors)
 		}
 
-		return getBookById(bookId) ?: error("Failed to fetch updated book with ID: $bookId")
+		return getBookById(bookId) ?: throw ResourceNotFoundException("Book not found with ID: $bookId")
 	}
 
 	override fun deleteBookAuthors(bookId: Int) {

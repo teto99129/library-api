@@ -2,6 +2,7 @@ package com.github.teto99129.library.author.controller
 
 import com.github.teto99129.library.author.model.Author
 import com.github.teto99129.library.author.service.AuthorService
+import com.github.teto99129.library.common.exception.ResourceNotFoundException
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import org.mockito.Mockito.`when`
@@ -123,6 +124,27 @@ class AuthorControllerTest : DescribeSpec() {
 					.andExpect(jsonPath("$.authorId").value(authorId))
 					.andExpect(jsonPath("$.name").value(name))
 					.andExpect(jsonPath("$.birthday").value(birthday.toString()))
+			}
+
+			it("異常 - 存在しないIDを指定した場合404エラー") {
+				val authorId = 999
+				val name = "コナン ドイル"
+
+				`when`(service.updateAuthor(authorId, name, null))
+					.thenThrow(ResourceNotFoundException("Author not found with ID: $authorId"))
+
+				val requestBody =
+					mapOf(
+						"name" to name,
+					)
+
+				mockMvc
+					.perform(
+						patch("/author/$authorId")
+							.contentType(MediaType.APPLICATION_JSON)
+							.content(objectMapper.writeValueAsString(requestBody)),
+					).andExpect(status().isNotFound)
+					.andExpect(jsonPath("$.error").value("Author not found with ID: $authorId"))
 			}
 
 			it("異常 - 生年月日が現在日より未来の場合400エラー") {

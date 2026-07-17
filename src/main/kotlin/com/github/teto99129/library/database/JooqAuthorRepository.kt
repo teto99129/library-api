@@ -2,6 +2,7 @@ package com.github.teto99129.library.database
 
 import com.github.teto99129.library.author.model.Author
 import com.github.teto99129.library.author.repository.AuthorRepository
+import com.github.teto99129.library.common.exception.ResourceNotFoundException
 import com.github.teto99129.library.jooq.tables.records.AuthorsRecord
 import com.github.teto99129.library.jooq.tables.references.AUTHORS
 import com.github.teto99129.library.jooq.tables.references.BOOK_AUTHORS
@@ -91,11 +92,11 @@ class JooqAuthorRepository(
 				.set(updateValues)
 				.where(AUTHORS.AUTHOR_ID.eq(authorId))
 				.returning()
-				.fetchOne() ?: error("Failed to update author with ID: $authorId")
+				.fetchOne() ?: throw ResourceNotFoundException("Author not found with ID: $authorId")
 		}
 		return dsl
 			.selectFrom(AUTHORS)
 			.where(AUTHORS.AUTHOR_ID.eq(authorId))
-			.fetchOne() ?: error("Author not found with ID: $authorId")
+			.fetchOne() ?: throw ResourceNotFoundException("Author not found with ID: $authorId")
 	}
 }
