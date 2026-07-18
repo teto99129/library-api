@@ -5,9 +5,9 @@ import jakarta.validation.constraints.Min
 import java.time.OffsetDateTime
 
 data class Book(
-	val bookID: Int,
+	val bookId: Int,
 	val title: String,
-	@field:Min(1)
+	@field:Min(0)
 	val value: Int,
 	val publicationStatus: PublicationStatus,
 	val createdAt: OffsetDateTime,

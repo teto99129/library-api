@@ -43,7 +43,7 @@ class BookControllerTest : DescribeSpec() {
 				val status = PublicationStatus.PUBLISHED
 				val createdBook =
 					Book(
-						bookID = 1,
+						bookId = 1,
 						title = title,
 						value = value,
 						publicationStatus = status,
@@ -67,16 +67,52 @@ class BookControllerTest : DescribeSpec() {
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(objectMapper.writeValueAsString(requestBody)),
 					).andExpect(status().isOk)
-					.andExpect(jsonPath("$.bookID").value(1))
+					.andExpect(jsonPath("$.book_id").value(1))
 					.andExpect(jsonPath("$.title").value(title))
 					.andExpect(jsonPath("$.value").value(value))
 			}
 
-			it("価格が0円の場合400エラー") {
+			it("正常 - 価格が0円の場合") {
+				val title = "Free Book"
+				val value = 0
+				val authors = listOf(1)
+				val status = PublicationStatus.PUBLISHED
+				val createdBook =
+					Book(
+						bookId = 1,
+						title = title,
+						value = value,
+						publicationStatus = status,
+						createdAt = OffsetDateTime.now(),
+						authors = emptyList(),
+					)
+
+				`when`(service.registerBook(title, value, authors, status)).thenReturn(createdBook)
+
+				val requestBody =
+					mapOf(
+						"title" to title,
+						"value" to value,
+						"publication_status" to status.code.toInt(),
+						"authors" to authors,
+					)
+
+				mockMvc
+					.perform(
+						post("/book")
+							.contentType(MediaType.APPLICATION_JSON)
+							.content(objectMapper.writeValueAsString(requestBody)),
+					).andExpect(status().isOk)
+					.andExpect(jsonPath("$.book_id").value(1))
+					.andExpect(jsonPath("$.title").value(title))
+					.andExpect(jsonPath("$.value").value(0))
+			}
+
+			it("異常 - 価格が0円未満（-1円）の場合400エラー") {
 				val requestBody =
 					mapOf(
 						"title" to "Invalid Value Book",
-						"value" to 0, // Min(1) violation
+						"value" to -1, // Min(0) violation
 						"publication_status" to PublicationStatus.PUBLISHED.code.toInt(),
 						"authors" to listOf(1),
 					)
@@ -119,7 +155,7 @@ class BookControllerTest : DescribeSpec() {
 					)
 				val updatedBook =
 					Book(
-						bookID = bookId,
+						bookId = bookId,
 						title = "Updated Title",
 						value = 2000,
 						publicationStatus = PublicationStatus.PUBLISHED,
@@ -141,7 +177,7 @@ class BookControllerTest : DescribeSpec() {
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(objectMapper.writeValueAsString(requestBody)),
 					).andExpect(status().isOk)
-					.andExpect(jsonPath("$.bookID").value(bookId))
+					.andExpect(jsonPath("$.book_id").value(bookId))
 					.andExpect(jsonPath("$.title").value("Updated Title"))
 					.andExpect(jsonPath("$.value").value(2000))
 			}
@@ -158,11 +194,47 @@ class BookControllerTest : DescribeSpec() {
 					).andExpect(status().isBadRequest)
 			}
 
-			it("異常 - 価格を0円に更新する場合400エラー") {
+			it("正常 - 価格を0円に更新") {
+				val bookId = 1
+				val expectedRequest =
+					PatchBookRequest(
+						title = null,
+						value = 0,
+						publicationStatus = null,
+						authors = null,
+					)
+				val updatedBook =
+					Book(
+						bookId = bookId,
+						title = "Updated Title",
+						value = 0,
+						publicationStatus = PublicationStatus.PUBLISHED,
+						createdAt = OffsetDateTime.now(),
+						authors = emptyList(),
+					)
+
+				`when`(service.updateBook(bookId, expectedRequest)).thenReturn(updatedBook)
+
+				val requestBody =
+					mapOf(
+						"value" to 0,
+					)
+
+				mockMvc
+					.perform(
+						patch("/book/$bookId")
+							.contentType(MediaType.APPLICATION_JSON)
+							.content(objectMapper.writeValueAsString(requestBody)),
+					).andExpect(status().isOk)
+					.andExpect(jsonPath("$.book_id").value(bookId))
+					.andExpect(jsonPath("$.value").value(0))
+			}
+
+			it("異常 - 価格を0円未満（-1円）に更新する場合400エラー") {
 				val bookId = 1
 				val requestBody =
 					mapOf(
-						"value" to 0, // Min(1) violation
+						"value" to -1, // Min(0) violation
 					)
 
 				mockMvc
@@ -194,14 +266,14 @@ class BookControllerTest : DescribeSpec() {
 				val books =
 					listOf(
 						Book(
-							bookID = 1,
+							bookId = 1,
 							title = "Book 1",
 							value = 1000,
 							publicationStatus = PublicationStatus.PUBLISHED,
 							createdAt = OffsetDateTime.now(),
 						),
 						Book(
-							bookID = 2,
+							bookId = 2,
 							title = "Book 2",
 							value = 1200,
 							publicationStatus = PublicationStatus.UNPUBLISHED,
@@ -218,9 +290,9 @@ class BookControllerTest : DescribeSpec() {
 							.param("auth_name", "Author"),
 					).andExpect(status().isOk)
 					.andExpect(jsonPath("$.length()").value(2))
-					.andExpect(jsonPath("$[0].bookID").value(1))
+					.andExpect(jsonPath("$[0].book_id").value(1))
 					.andExpect(jsonPath("$[0].title").value("Book 1"))
-					.andExpect(jsonPath("$[1].bookID").value(2))
+					.andExpect(jsonPath("$[1].book_id").value(2))
 					.andExpect(jsonPath("$[1].title").value("Book 2"))
 			}
 		}

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size
 
 data class PatchBookRequest(
 	val title: String?,
-	@field:Min(1)
+	@field:Min(0)
 	val value: Int?,
 	@JsonProperty("publication_status")
 	val publicationStatus: PublicationStatus?,

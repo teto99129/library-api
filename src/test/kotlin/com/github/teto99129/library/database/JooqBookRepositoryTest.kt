@@ -32,7 +32,7 @@ class JooqBookRepositoryTest(
 
 				val book = bookRepository.insertBook(title, value, status, listOf(author.authorId))
 
-				book.bookID shouldNotBe null
+				book.bookId shouldNotBe null
 				book.title shouldBe title
 				book.value shouldBe value
 				book.publicationStatus shouldBe status
@@ -46,7 +46,7 @@ class JooqBookRepositoryTest(
 				val author = authorRepository.insertAuthor("芥川 竜之介", LocalDate.of(1892, 3, 1))
 				val original = bookRepository.insertBook("羅生門", 800, PublicationStatus.PUBLISHED, listOf(author.authorId))
 
-				val updated = bookRepository.updateBook(original.bookID, "新・羅生門", null, null, null)
+				val updated = bookRepository.updateBook(original.bookId, "新・羅生門", null, null, null)
 
 				updated.title shouldBe "新・羅生門"
 				updated.value shouldBe original.value
@@ -60,7 +60,7 @@ class JooqBookRepositoryTest(
 				val original = bookRepository.insertBook("人間失格", 1200, PublicationStatus.PUBLISHED, listOf(author1.authorId))
 
 				// 著者を author2 に変更
-				val updated = bookRepository.updateBook(original.bookID, null, null, null, listOf(author2.authorId))
+				val updated = bookRepository.updateBook(original.bookId, null, null, null, listOf(author2.authorId))
 
 				updated.authors shouldHaveSize 1
 				updated.authors[0].authorId shouldBe author2.authorId
@@ -70,7 +70,7 @@ class JooqBookRepositoryTest(
 				val author = authorRepository.insertAuthor("中島 敦", LocalDate.of(1909, 5, 5))
 				val original = bookRepository.insertBook("山月記", 500, PublicationStatus.PUBLISHED, listOf(author.authorId))
 
-				val updated = bookRepository.updateBook(original.bookID, null, null, null, null)
+				val updated = bookRepository.updateBook(original.bookId, null, null, null, null)
 
 				updated.title shouldBe original.title
 				updated.value shouldBe original.value
@@ -105,7 +105,7 @@ class JooqBookRepositoryTest(
 				val result = bookRepository.getBook(author1.authorId, null)
 
 				result shouldHaveSize 1
-				result[0].bookID shouldBe book1.bookID
+				result[0].bookId shouldBe book1.bookId
 			}
 
 			it("正常 - 著者名（あいまい検索）で絞り込めること") {
@@ -119,7 +119,7 @@ class JooqBookRepositoryTest(
 				val result = bookRepository.getBook(null, "川端")
 
 				result shouldHaveSize 1
-				result[0].bookID shouldBe book1.bookID
+				result[0].bookId shouldBe book1.bookId
 			}
 		}
 
@@ -128,7 +128,7 @@ class JooqBookRepositoryTest(
 				val author = authorRepository.insertAuthor("志賀 直哉", LocalDate.of(1883, 2, 20))
 				val book = bookRepository.insertBook("暗夜行路", 2000, PublicationStatus.PUBLISHED, listOf(author.authorId))
 
-				val result = bookRepository.getBookById(book.bookID)
+				val result = bookRepository.getBookById(book.bookId)
 
 				result shouldNotBe null
 				result!!.title shouldBe "暗夜行路"

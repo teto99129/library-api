@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotEmpty
 
 data class PostBookRequest(
 	val title: String,
-	@field:Min(1)
+	@field:Min(0)
 	val value: Int,
 	@JsonProperty("publication_status")
 	val publicationStatus: PublicationStatus,

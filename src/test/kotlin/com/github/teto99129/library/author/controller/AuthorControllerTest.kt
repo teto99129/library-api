@@ -52,7 +52,31 @@ class AuthorControllerTest : DescribeSpec() {
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(objectMapper.writeValueAsString(requestBody)),
 					).andExpect(status().isOk)
-					.andExpect(jsonPath("$.authorId").value(1))
+					.andExpect(jsonPath("$.author_id").value(1))
+					.andExpect(jsonPath("$.name").value(name))
+					.andExpect(jsonPath("$.birthday").value(birthday.toString()))
+			}
+
+			it("正常 - 生年月日が現在日の場合") {
+				val name = "今日生まれた 著者"
+				val birthday = LocalDate.now()
+				val registeredAuthor = Author(authorId = 2, name = name, birthday = birthday)
+
+				`when`(service.registerAuthor(name, birthday)).thenReturn(registeredAuthor)
+
+				val requestBody =
+					mapOf(
+						"name" to name,
+						"birthday" to birthday.toString(),
+					)
+
+				mockMvc
+					.perform(
+						post("/author")
+							.contentType(MediaType.APPLICATION_JSON)
+							.content(objectMapper.writeValueAsString(requestBody)),
+					).andExpect(status().isOk)
+					.andExpect(jsonPath("$.author_id").value(2))
 					.andExpect(jsonPath("$.name").value(name))
 					.andExpect(jsonPath("$.birthday").value(birthday.toString()))
 			}
@@ -97,7 +121,7 @@ class AuthorControllerTest : DescribeSpec() {
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(objectMapper.writeValueAsString(requestBody)),
 					).andExpect(status().isOk)
-					.andExpect(jsonPath("$.authorId").value(authorId))
+					.andExpect(jsonPath("$.author_id").value(authorId))
 					.andExpect(jsonPath("$.name").value(name))
 					.andExpect(jsonPath("$.birthday").value(birthday.toString()))
 			}
@@ -121,7 +145,7 @@ class AuthorControllerTest : DescribeSpec() {
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(objectMapper.writeValueAsString(requestBody)),
 					).andExpect(status().isOk)
-					.andExpect(jsonPath("$.authorId").value(authorId))
+					.andExpect(jsonPath("$.author_id").value(authorId))
 					.andExpect(jsonPath("$.name").value(name))
 					.andExpect(jsonPath("$.birthday").value(birthday.toString()))
 			}
@@ -145,6 +169,29 @@ class AuthorControllerTest : DescribeSpec() {
 							.content(objectMapper.writeValueAsString(requestBody)),
 					).andExpect(status().isNotFound)
 					.andExpect(jsonPath("$.error").value("Author not found with ID: $authorId"))
+			}
+
+			it("正常 - 生年月日を現在日に更新") {
+				val authorId = 1
+				val name = "コナン ドイル"
+				val birthday = LocalDate.now()
+				val updatedAuthor = Author(authorId = authorId, name = name, birthday = birthday)
+
+				`when`(service.updateAuthor(authorId, null, birthday)).thenReturn(updatedAuthor)
+
+				val requestBody =
+					mapOf(
+						"birthday" to birthday.toString(),
+					)
+
+				mockMvc
+					.perform(
+						patch("/author/$authorId")
+							.contentType(MediaType.APPLICATION_JSON)
+							.content(objectMapper.writeValueAsString(requestBody)),
+					).andExpect(status().isOk)
+					.andExpect(jsonPath("$.author_id").value(authorId))
+					.andExpect(jsonPath("$.birthday").value(birthday.toString()))
 			}
 
 			it("異常 - 生年月日が現在日より未来の場合400エラー") {

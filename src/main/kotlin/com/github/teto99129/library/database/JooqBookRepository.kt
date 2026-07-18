@@ -145,7 +145,7 @@ class JooqBookRepository(
 			.where(authCondition)
 			.fetch { record ->
 				Book(
-					bookID = record.get(BOOKS.BOOK_ID)!!,
+					bookId = record.get(BOOKS.BOOK_ID)!!,
 					title = record.get(BOOKS.TITLE)!!,
 					value = record.get(BOOKS.VALUE)!!,
 					publicationStatus = PublicationStatus.fromCode(record.get(BOOKS.PUBLICATION_STATUS)!!),
@@ -185,7 +185,7 @@ class JooqBookRepository(
 			.where(BOOKS.BOOK_ID.eq(bookId))
 			.fetchOne { record ->
 				Book(
-					bookID = record.get(BOOKS.BOOK_ID)!!,
+					bookId = record.get(BOOKS.BOOK_ID)!!,
 					title = record.get(BOOKS.TITLE)!!,
 					value = record.get(BOOKS.VALUE)!!,
 					publicationStatus = PublicationStatus.fromCode(record.get(BOOKS.PUBLICATION_STATUS)!!),

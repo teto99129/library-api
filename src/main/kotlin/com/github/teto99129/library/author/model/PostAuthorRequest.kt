@@ -1,10 +1,10 @@
 package com.github.teto99129.library.author.model
 
-import jakarta.validation.constraints.Past
+import jakarta.validation.constraints.PastOrPresent
 import java.time.LocalDate
 
 data class PostAuthorRequest(
 	val name: String,
-	@field:Past(message = "生年月日は過去の日付を指定してください")
+	@field:PastOrPresent(message = "生年月日は過去または現在の日付を指定してください")
 	val birthday: LocalDate,
 )

@@ -23,7 +23,7 @@ class BookServiceTest : DescribeSpec() {
 				val bookId = 1
 				val currentBook =
 					Book(
-						bookID = bookId,
+						bookId = bookId,
 						title = "テスト本",
 						value = 1000,
 						publicationStatus = PublicationStatus.UNPUBLISHED,
@@ -39,7 +39,7 @@ class BookServiceTest : DescribeSpec() {
 					)
 				val expectedBook =
 					Book(
-						bookID = bookId,
+						bookId = bookId,
 						title = "テスト本",
 						value = 1000,
 						publicationStatus = PublicationStatus.PUBLISHED,
@@ -59,7 +59,7 @@ class BookServiceTest : DescribeSpec() {
 				val bookId = 1
 				val currentBook =
 					Book(
-						bookID = bookId,
+						bookId = bookId,
 						title = "旧タイトル",
 						value = 1000,
 						publicationStatus = PublicationStatus.PUBLISHED,
@@ -75,7 +75,7 @@ class BookServiceTest : DescribeSpec() {
 					)
 				val expectedBook =
 					Book(
-						bookID = bookId,
+						bookId = bookId,
 						title = "新タイトル",
 						value = 1000,
 						publicationStatus = PublicationStatus.PUBLISHED,
@@ -96,7 +96,7 @@ class BookServiceTest : DescribeSpec() {
 				val bookId = 1
 				val currentBook =
 					Book(
-						bookID = bookId,
+						bookId = bookId,
 						title = "公開済みの本",
 						value = 1500,
 						publicationStatus = PublicationStatus.PUBLISHED,

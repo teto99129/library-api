@@ -1,11 +1,12 @@
 package com.github.teto99129.library.book.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.github.teto99129.library.author.model.Author
+import com.github.teto99129.library.author.model.AuthorResponse
 import java.time.OffsetDateTime
 
 data class BookResponse(
-	val bookID: Int,
+	@JsonProperty("book_id")
+	val bookId: Int,
 	val title: String,
 	val value: Int,
 	@JsonProperty("publication_status")
@@ -14,18 +15,24 @@ data class BookResponse(
 	val publicationStatusLabel: String,
 	@JsonProperty("created_at")
 	val createdAt: OffsetDateTime,
-	val authors: List<Author>,
+	val authors: List<AuthorResponse>,
 ) {
 	companion object {
 		fun from(book: Book): BookResponse =
 			BookResponse(
-				bookID = book.bookID,
+				bookId = book.bookId,
 				title = book.title,
 				value = book.value,
 				publicationStatus = book.publicationStatus.code,
 				publicationStatusLabel = book.publicationStatus.label,
 				createdAt = book.createdAt,
-				authors = book.authors,
+				authors = book.authors.map { author ->
+					AuthorResponse(
+						authorId = author.authorId,
+						name = author.name,
+						birthday = author.birthday,
+					)
+				},
 			)
 	}
 }
