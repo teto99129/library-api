@@ -31,7 +31,6 @@ class JooqAuthorRepositoryTest(
 			}
 		}
 
-
 		describe("updateAuthor") {
 			it("正常 - 名前のみ更新（生年月日は元の値をキープ）") {
 				val original = repository.insertAuthor("コナン ドイル", LocalDate.of(1859, 5, 22))

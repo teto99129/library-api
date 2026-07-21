@@ -26,13 +26,14 @@ data class BookResponse(
 				publicationStatus = book.publicationStatus.code,
 				publicationStatusLabel = book.publicationStatus.label,
 				createdAt = book.createdAt,
-				authors = book.authors.map { author ->
-					AuthorResponse(
-						authorId = author.authorId,
-						name = author.name,
-						birthday = author.birthday,
-					)
-				},
+				authors =
+					book.authors.map { author ->
+						AuthorResponse(
+							authorId = author.authorId,
+							name = author.name,
+							birthday = author.birthday,
+						)
+					},
 			)
 	}
 }
